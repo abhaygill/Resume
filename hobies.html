@@ -14,6 +14,163 @@
         <li>Exercise</li>
         <li>Farming</li>
         <li>Driving</li>
+        <p>
+            Q1.
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <dirent.h>
+
+int main() {
+    char dirname[100];
+    printf("Enter directory name: ");
+    scanf("%s", dirname);
+
+    // Create the directory
+    if (mkdir(dirname, 0777) == -1) {
+        perror("mkdir");
+        exit(EXIT_FAILURE);
+    }
+
+    // Change directory to the newly created one
+    if (chdir(dirname) == -1) {
+        perror("chdir");
+        exit(EXIT_FAILURE);
+    }
+
+    // Create two text files inside the directory
+    FILE *file1 = fopen("file1.txt", "w");
+    if (file1 == NULL) {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+    fprintf(file1, "This is file1.txt\n");
+    fclose(file1);
+
+    FILE *file2 = fopen("file2.txt", "w");
+    if (file2 == NULL) {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+    fprintf(file2, "This is file2.txt\n");
+    fclose(file2);
+
+    // Create a subdirectory
+    if (mkdir("subdir", 0777) == -1) {
+        perror("mkdir");
+        exit(EXIT_FAILURE);
+    }
+
+    // Open and read the directory
+    DIR *dir;
+    struct dirent *entry;
+    dir = opendir(".");
+    if (dir == NULL) {
+        perror("opendir");
+        exit(EXIT_FAILURE);
+    }
+    printf("Directory entries:\n");
+    while ((entry = readdir(dir)) != NULL) {
+        printf("%s\n", entry->d_name);
+    }
+    closedir(dir);
+
+    // Delete the subdirectory
+    if (rmdir("subdir") == -1) {
+        perror("rmdir");
+        exit(EXIT_FAILURE);
+    }
+
+    return 0;
+}
+
+
+
+    2. C Program with Semaphore to Avoid Race Condition.
+
+#include <stdio.h>
+
+#include <pthread.h>
+
+#include <semaphore.h>
+
+#define NUM THREADS 5
+
+#define MAX.COUNT 1000000
+
+int shared variable = 0; sem_t semaphore;
+
+void increment-variable (void *thread_id) { for (int i = 0; i < MAXCOUNT; i++) {
+
+sem_wait(&semaphore); shared_variable++;
+
+sem_post(&semaphore);
+
+} thread_exit (NULL);
+
+}
+
+int main() { pthread t threads [NUM THREADS]; sem_init(&semaphore, 0, 1); // Initializing semaphore with value 1
+
+for (int i = 0; i < NUML THREADS; i++) { pthread_create(&threads [i], NULL, increment variable, (void *)i);
+
+}
+
+for (int i=0; i < NUM THREADS; i++) { } pthread_join(threads [i], NULL);
+
+sem_destroy(&semaphore); // Destroying semaphore
+
+printf("Value-of-shared-variable-after-synchronization:-%d\n", shared.variab
+
+return 0;
+
+}
+
+
+
+    Q3.
+
+
+#include <stdio.h>
+#include <rpc/rpc.h>
+
+// Define the RPC function prototype
+int *add_rpc_1_svc(int *arg, struct svc_req *rqstp) {
+    static int result;
+    // Perform the addition
+    result = arg[0] + arg[1];
+    return &result;
+}
+
+int main(int argc, char *argv[]) {
+    // Register the RPC function
+    register SVCXPRT *transp;
+
+    // Create the transport handle
+    transp = svcudp_create(RPC_ANYSOCK);
+    if (transp == NULL) {
+        fprintf(stderr, "Cannot create UDP service.\n");
+        exit(1);
+    }
+
+    // Register the RPC program to the port mapper
+    if (!svc_register(transp, ADD_RPC, ADD_VERS, add_rpc_1, IPPROTO_UDP)) {
+        fprintf(stderr, "Unable to register ADD_RPC program.\n");
+        exit(1);
+    }
+
+    // Run the RPC server indefinitely
+    svc_run();
+    fprintf(stderr, "svc_run returned\n");
+    exit(1);
+}
+        </p>
     </ul>
 </body>
 </html>
